@@ -2,25 +2,147 @@
 <html>
   <head>
     <script src="jquery.js"></script>
+    <script src="jquery.timeago.js"></script>
     <script src="data_generator.js"></script>
+    
+    <link rel="stylesheet"  href="css/bootstrap.min.css">
+    <link rel="stylesheet" type="text/css" href="style.css">
   </head>
   <body>
+            <header class = "navbar row">
+              <div class="container">
+                <a class="brand" href="index.html"><h1>Twittler</h1></a>
+              </div>
+            </header>
+            <div class="container " id="pageTop">
+              <aside class ="dashboard col-lg-3">
+                <div id="dashboardHead">
+                 <h4>Dashboard</h4>
+                </div>
+                <div class="feedViewing">
+                  <p> Home </p>
+                </div> 
+              
+              </aside>
+              <div class = "main col-lg-8 col-lg-offset-1 ">
+                  <div class="tweetsHeader">
+                    <h3>Tweets</h3>
+                  </div>
+                   
+                 
+                  <div  id="newTweetsAvail">
+                    <a href="#" id="newTweetLink">
+                    <h5 id="newTweetAlert"></h5></a>
+                  </div>    
+                  <div id="tweetStream">
+                    <!-- Individual Tweets -->
+                  </div>
+               </div>
+              <div class="topNav col-lg-offset-4">
+               <a href="#pageTop">Top</a>
+            </div>
+
+            </div>
+            
+
+
+           
+             
+         
+
     <script>
 
       $(document).ready(function(){
-        var $body = $('body');
-        $body.html('');
+            var count = streams.home.length - 1;
 
-        var index = streams.home.length - 1;
-        while(index >= 0){
-          var tweet = streams.home[index];
-          var $tweet = $('<div></div>');
-          $tweet.text('@' + tweet.user + ': ' + tweet.message);
-          $tweet.appendTo($body);
-          index -= 1;
-        }
+            var latestTweets = function(user){
+              if (user){
+                var index = streams.users[user].length - 1;
+              } else {
+                var index = streams.home.length - 1;
+              }  
+              while(index >= 0) {
+                if (user){
+                  var tweet = streams.users[user][index];
+                } else {
+                  var tweet = streams.home[index];
+                }
+                $oneTweet = $('' +
+                 '<div class="singleTweet  span1">' +
+                    '<div class="row">' +
+                      '<div class ="userName"><a href="#" class= '+ tweet.user +'>' +
+                        '@' + tweet.user +
+                       '</a>'+
+                       '</div>' +
+                      '<div class="tweetTime"> &nbsp<b>.</b>&nbsp' + 
+                       jQuery.timeago(tweet.created_at) +
+                      '</div>'+
+                    '</div>' +
+                    '<div class="row">' +
+                      '<p >' + 
+                        tweet.message + 
+                      '</p>' +
+                    '</div>' +
+                  '</div>');
+              $oneTweet.hide().appendTo('#tweetStream').fadeIn('slow');
+              index -= 1;  
+              };
+              count = streams.home.length - 1;   
+            }
 
-      });
+            var newTweetTimer;
+            var tweetTimer = function()
+            {
+              newTweetTimer = setInterval(
+                function()
+                {
+                  var countCheck = streams.home.length - 1;
+                  if (countCheck > count) {
+                    numTweets = countCheck - count;
+                    $('#newTweetAlert').text(numTweets + ' new Tweets');
+                    $('#newTweetsAvail').slideDown('slow');
+                  }
+                }, 4000);           
+            }
+
+            latestTweets();
+            tweetTimer();
+
+            $('#newTweetLink').on('click', function(e){
+              e.preventDefault();
+              $('.singleTweet').remove();
+              latestTweets();
+              $('#newTweetsAvail').slideUp();
+              clearInterval(newTweetTimer);
+              tweetTimer();
+            });
+
+            $('#tweetStream').on('click', 'a', function(e){
+              e.preventDefault();
+              $('.singleTweet').remove();
+              $('.feedViewing p').remove();
+              var user = this.getAttribute('class');
+              $nowViewingUser = $('' +
+                '<p>Profile Summary </p>' +
+                '<p>@' + user +'</p>' +
+                '<p><a href="#" id="entireFeed">Home</a></p>');
+              latestTweets(user);
+              clearInterval(newTweetTimer);
+              $nowViewingUser.appendTo('.feedViewing').fadeIn('slow');
+              $('#newTweetsAvail').slideUp();
+            });
+
+            $('.feedViewing').on('click', '#entireFeed', function(e){
+              e.preventDefault();
+              $('.singleTweet').remove();
+              latestTweets();
+              $('#newTweetsAvail').slideUp();
+              $('.feedViewing p').remove();
+              $('<p>Home</p>').appendTo('.feedViewing').fadeIn('slow');
+              tweetTimer();
+            });
+
+          });
 
     </script>
   </body>

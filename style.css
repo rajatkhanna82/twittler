@@ -1,0 +1,64 @@
+body{
+	background-color: #C0DEED;
+}
+.navbar{
+	border: 1px ;
+	border-radius: 4px;
+	background-color: rgb(194,194,194);
+
+}
+
+.dashboard{
+	border: 1px solid;
+	border-radius: 6px;
+	background-color: #f8f8f8;
+
+}
+.tweetsHeader{
+	padding-left: 10px;
+}
+#newTweetsAvail{
+	text-align: center;
+	border: 1px;
+	padding: 5px 0;
+	background-color: rgb(194,194,194);
+	display: none;
+}
+.main{
+	background-color: #f8f8f8;
+	border: 1px solid;
+	border-radius: 6px;
+	padding-left: 0px;
+	padding-right: 0px;
+
+}
+.userName a{
+	font-size: 15px;
+	font-weight: bold;
+	text-decoration: none ;
+	float: left;
+}
+.username:hover{
+	color: #428bca;
+	text-decoration: underline;
+	cursor: auto;
+
+}
+#dashboardHead{
+	
+	border-bottom: 1px solid;
+
+}
+.tweetTime{
+	color :gray;
+	padding-top: 3px;
+	font-size: 12px;
+}
+.singleTweet {
+	padding: 10px 20px;	
+	margin-left: 0px;
+	border-top: 1px solid #aaa;
+}
+.topNav{
+	text-align: center;
+}
